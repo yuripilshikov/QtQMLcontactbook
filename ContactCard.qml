@@ -10,6 +10,7 @@ Item {
 
     signal clicked(var event)
     signal trigger(string name) // cardText.text to be sent.
+    signal sendItem(Item item)
 
     Rectangle {
         id: content
@@ -66,6 +67,7 @@ Item {
                 selected = !selected;
                 (eventPoint)=>{root.clicked(eventPoint)}
                 root.trigger(cardText.text); // !!!
+                root.sendItem(root);
             }
             onLongPressed: longPress = !longPress
         }

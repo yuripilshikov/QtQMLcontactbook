@@ -34,30 +34,66 @@ Window {
             stack.pop()
         }
 
+        signal createNewCard()
+        onCreateNewCard: {
+            stack.push(newCardView);
+        }
+
     }
 
     Component {
         id: listView
 
-        ListView {
-            id: myListView
-            header: Text {text: "Phone book"}
-            footer: Text {text: "here be some else text"}
-
-            anchors.fill: window
-            model: _model
+        Rectangle {
+            id: content
+            anchors.fill: parent
 
 
 
-            delegate: ContactCard {
-                text: name + "\n" + phone + "\n" + email
-                color: cardColor
-                Component.onCompleted: {
-                    trigger.connect(root.componentTriggered);
-                    trigger.connect(stack.showDetails);
+            signal createNewCard
+
+            Component.onCompleted: {
+                createNewCard.connect(stack.createNewCard);
+            }
+
+            ListView {
+                id: myListView
+                header: Text {text: "Phone book"}
+                footer: Text {text: "here be some else text"}
+
+                anchors.fill: parent
+                model: _model
+
+
+
+                delegate: ContactCard {
+                    text: name + "\n" + phone + "\n" + email
+                    color: cardColor
+                    Component.onCompleted: {
+                        trigger.connect(root.componentTriggered);
+                        trigger.connect(stack.showDetails);
+                    }
+                }
+
+            }
+
+            Button {
+                id: newCardButton
+                anchors.bottom: parent.bottom;
+                anchors.left: parent.left;
+                text: "create new"
+                onClicked: {
+                    console.log("clicked!!!");
+                    content.createNewCard()
                 }
             }
+
         }
+
+
+
+
+
     }
 
     Component {
@@ -65,12 +101,12 @@ Window {
 
         Rectangle {
             id: content
-            anchors.fill: window
+            anchors.fill: parent
             color: "yellow"
             opacity: 0.4
             signal returnToList
             Component.onCompleted: {
-                returnToList.connect(stack.returnToList);
+                returnToList.connect(stack.returnToList);                
             }
 
             Text {
@@ -78,16 +114,31 @@ Window {
                 text: stack.selectedName
             }
 
-
-
             TapHandler {
-                onTapped: returnToList()
+                onTapped:{
+                    //console.log(inputField.text);
+                    returnToList()
+                }
             }
-
-
         }
-    }
 
+    }
+    Component {
+        id: newCardView
+        //CreateCard{}
+        TextField {
+            id: inputField
+            anchors.centerIn: parent
+            width: 200
+            height: 25
+            color: "navy"
+            text: "Hello world"
+            font.family: "Verdana"
+            font.pixelSize: 16
+            font.capitalization: Font.Capitalize
+        }
+
+    }
 
 
 }
