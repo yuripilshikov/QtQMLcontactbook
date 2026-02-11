@@ -1,6 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Controls 2.0 // stackView
+import QtQuick.Layouts 1.12 // GridLayout
 
 Window {
     id: root
@@ -98,45 +99,11 @@ Window {
 
     Component {
         id: detailedView
-
-        Rectangle {
-            id: content
-            anchors.fill: parent
-            color: "yellow"
-            opacity: 0.4
-            signal returnToList
-            Component.onCompleted: {
-                returnToList.connect(stack.returnToList);                
-            }
-
-            Text {
-                id: contentText
-                text: stack.selectedName
-            }
-
-            TapHandler {
-                onTapped:{
-                    //console.log(inputField.text);
-                    returnToList()
-                }
-            }
-        }
-
+        ViewCard{}
     }
     Component {
         id: newCardView
-        //CreateCard{}
-        TextField {
-            id: inputField
-            anchors.centerIn: parent
-            width: 200
-            height: 25
-            color: "navy"
-            text: "Hello world"
-            font.family: "Verdana"
-            font.pixelSize: 16
-            font.capitalization: Font.Capitalize
-        }
+        EditCard{}
 
     }
 

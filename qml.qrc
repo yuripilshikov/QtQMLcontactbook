@@ -2,6 +2,7 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>ContactCard.qml</file>
-        <file>CreateCard.qml</file>
+        <file>EditCard.qml</file>
+        <file>ViewCard.qml</file>
     </qresource>
 </RCC>
