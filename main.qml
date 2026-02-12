@@ -2,6 +2,7 @@ import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Controls 2.0 // stackView
 import QtQuick.Layouts 1.12 // GridLayout
+import QtQuick.Dialogs 1.2 // openFileDialog
 
 Window {
     id: root
@@ -18,7 +19,8 @@ Window {
 
     StackView {
         id: stack
-        initialItem: listView
+        //initialItem: listView
+        initialItem: mainMenuScreen
         anchors.fill: parent
 
         property string selectedName;
@@ -43,13 +45,51 @@ Window {
     }
 
     Component {
+        id: mainMenuScreen
+        Rectangle {
+            id: content
+            anchors.fill: parent
+            color: "orchid"
+
+            Column {
+                spacing: 30
+                anchors.centerIn: content
+
+                Button {
+                    id: btnNewDB
+                    font.pixelSize: 30
+                    text: "New database"
+                    onClicked: {
+                        //
+                    }
+                }
+                Button {
+                    id: btnOpenDB
+                    font.pixelSize: 30
+                    text: "Open database"
+                    onClicked: {
+                        fileDialog.open()
+                    }
+                }
+                Button {
+                    id: btnQuit
+                    font.pixelSize: 30
+                    text: "Quit" // пока это чисто для тестов кнопка!
+                    onClicked: {
+                        stack.push(listView); // похоже, можно без сигнала.
+                    }
+                }
+
+            }
+        }
+    }
+
+    Component {
         id: listView
 
         Rectangle {
             id: content
             anchors.fill: parent
-
-
 
             signal createNewCard
 
@@ -74,6 +114,9 @@ Window {
                         trigger.connect(root.componentTriggered);
                         trigger.connect(stack.showDetails);
                     }
+                    onClicked: {
+                        console.log(currentIndex)
+                    }
                 }
 
             }
@@ -84,7 +127,6 @@ Window {
                 anchors.left: parent.left;
                 text: "create new"
                 onClicked: {
-                    console.log("clicked!!!");
                     content.createNewCard()
                 }
             }
@@ -106,6 +148,13 @@ Window {
         EditCard{}
 
     }
+
+    FileDialog {
+        id: fileDialog
+        onAccepted: console.log("file selected: " + fileUrl)
+        onRejected: console.log("canceled")
+    }
+
 
 
 }
