@@ -3,10 +3,10 @@
 
 ContactModel::ContactModel(QObject *parent) : QAbstractListModel(parent)
 {
-    m_contacts.append(new Contact("Alpha", "+7123321", "alpha@mail.mail", 0, QColor("#bbbbbb")));
-    m_contacts.append(new Contact("Beta", "+7321123", "beta@mail.mail", 0, QColor("#050505")));
-    m_contacts.append(new Contact("Gamma", "+7234432", "gamma@mail.mail", 0, QColor("#060606")));
-    m_contacts.append(new Contact("Delta", "+7345543", "delta@mail.mail", 0, QColor("#cccccc")));
+    m_contacts.append(new Contact("Alpha", "+7123321", "alpha@mail.mail", 0, QColor("#bbbbbb"), "ACME"));
+    m_contacts.append(new Contact("Beta", "+7321123", "beta@mail.mail", 0, QColor("#050505"), "ABC"));
+    m_contacts.append(new Contact("Gamma", "+7234432", "gamma@mail.mail", 0, QColor("#060606"), "ARC"));
+    m_contacts.append(new Contact("Delta", "+7345543", "delta@mail.mail", 0, QColor("#cccccc"), "FUSION"));
 }
 
 
@@ -29,6 +29,8 @@ QVariant ContactModel::data(const QModelIndex &index, int role) const
         return m_contacts.at(index.row())->avaId();
     case ColorRole:
         return m_contacts.at(index.row())->contactColor();
+    case CompanyRole:
+        return m_contacts.at(index.row())->company();
     }
     return QVariant();
 }
@@ -47,36 +49,47 @@ QHash<int, QByteArray> ContactModel::roleNames() const
     roles[EmailRole] = "email";
     roles[AvaIdRole] = "avatar";
     roles[ColorRole] = "cardColor";
+    roles[CompanyRole] = "company";
 
     return roles;
 }
 
-void ContactModel::changeName(int index)
+void ContactModel::add()
 {
-    // todo
+    beginInsertRows(QModelIndex(), m_contacts.size(), m_contacts.size());
+    m_contacts.append(new Contact("Delta", "+7345543", "delta@mail.mail", 0, QColor("#cccccc"), "FUSION"));
+    endInsertRows();
 }
 
-void ContactModel::changePhone(int index)
+
+
+
+bool ContactModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    // todo
+    if(!index.isValid()) return false;
+
+    switch(role)
+    {
+    case NameRole:
+        m_contacts.at(index.row())->setName(value.toString());
+    case PhoneRole:
+        m_contacts.at(index.row())->setPhone(value.toString());
+    case EmailRole:
+        m_contacts.at(index.row())->setEmail(value.toString());
+    case AvaIdRole:
+        m_contacts.at(index.row())->setAvaId(value.toInt());
+    case ColorRole:
+        m_contacts.at(index.row())->setContactColor(value.toString());
+    case CompanyRole:
+        m_contacts.at(index.row())->setCompany(value.toString());
+    default:
+        return false;
+
+    }
 }
 
-void ContactModel::changeEmail(int index)
+Qt::ItemFlags ContactModel::flags(const QModelIndex &index) const
 {
-    // todo
-}
-
-void ContactModel::changeAvaId(int index)
-{
-    // todo
-}
-
-void ContactModel::changeColor(int index)
-{
-    // todo
-}
-
-void ContactModel::removeRow(int index)
-{
-    // todo
+    if(!index.isValid()) return Qt::ItemIsEnabled;
+    return QAbstractListModel::flags(index) | Qt::ItemIsEditable;
 }

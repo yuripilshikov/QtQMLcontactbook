@@ -13,17 +13,20 @@ class Contact : public QObject
     QString m_email;
     int m_avaId;
     QColor m_contactColor;
+    QString m_company;
 
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString phone READ phone WRITE setPhone NOTIFY phoneChanged)
     Q_PROPERTY(QString email READ email WRITE setEmail NOTIFY emailChanged)
     Q_PROPERTY(int avaId READ avaId WRITE setAvaId NOTIFY avaIdChanged)
     Q_PROPERTY(QColor contactColor READ contactColor WRITE setContactColor NOTIFY contactColorChanged)
+    Q_PROPERTY(QString company READ company WRITE setCompany NOTIFY companyChahged)
+
 
 public:
     explicit Contact(QObject *parent = nullptr);
-    Contact(QString const& name, QString const& phone, QString const& email, int avaId, QColor const& color)
-        : m_name(name), m_phone(phone), m_email(email), m_avaId(avaId), m_contactColor(color) {}
+    Contact(QString const& name, QString const& phone, QString const& email, int avaId, QColor const& color, QString const& company)
+        : m_name(name), m_phone(phone), m_email(email), m_avaId(avaId), m_contactColor(color), m_company(company) {}
 
     QString name() const
     {
@@ -48,6 +51,11 @@ public:
     QColor contactColor() const
     {
         return m_contactColor;
+    }
+
+    QString company() const
+    {
+        return m_company;
     }
 
 public slots:
@@ -96,6 +104,15 @@ public slots:
         emit contactColorChanged(m_contactColor);
     }
 
+    void setCompany(QString const& company)
+    {
+        if (m_company == company)
+            return;
+
+        m_company = company;
+        emit companyChahged(m_company);
+    }
+
 signals:
 
     void nameChanged(QString name);
@@ -103,6 +120,7 @@ signals:
     void emailChanged(QString email);
     void avaIdChanged(int avaId);
     void contactColorChanged(QColor contactColor);
+    void companyChahged(QString company);
 };
 
 #endif // CONTACT_H

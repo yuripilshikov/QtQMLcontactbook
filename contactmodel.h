@@ -19,20 +19,20 @@ public:
         PhoneRole,
         EmailRole,
         AvaIdRole,
-        ColorRole
+        ColorRole,
+        CompanyRole
     };
 
     int rowCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
     bool removeRows(int row, int count, const QModelIndex &parent) override;
     QHash<int, QByteArray> roleNames() const override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role) override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
 
-    Q_INVOKABLE void changeName(int index);
-    Q_INVOKABLE void changePhone(int index);
-    Q_INVOKABLE void changeEmail(int index);
-    Q_INVOKABLE void changeAvaId(int index);
-    Q_INVOKABLE void changeColor(int index);
-    Q_INVOKABLE void removeRow(int index);
+    Q_INVOKABLE void add();
+
+
 };
 
 #endif // CONTACTMODEL_H
