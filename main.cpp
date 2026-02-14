@@ -4,6 +4,7 @@
 #include "contactmodel.h"
 #include "bdhelper.h"
 #include "sqlcontactsmodel.h"
+#include "myimageprovider.h"
 
 int main(int argc, char *argv[])
 {
@@ -29,6 +30,8 @@ int main(int argc, char *argv[])
         if (!obj && url == objUrl)
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
+
+    engine.addImageProvider("myimageprovider", new MyImageProvider());
 
     engine.load(url);
 

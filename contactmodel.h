@@ -31,7 +31,7 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
     Q_INVOKABLE void add();
-    Q_INVOKABLE void addItem(QString name, QString phone, QString email, QString Organization);
+    Q_INVOKABLE void addItem(QString name, QString phone, QString email, QString Organization, QString avatar);
 
 
 };

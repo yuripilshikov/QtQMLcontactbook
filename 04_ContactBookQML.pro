@@ -18,6 +18,7 @@ SOURCES += \
         contact.cpp \
         contactmodel.cpp \
         main.cpp \
+        myimageprovider.cpp \
         sqlcontactsmodel.cpp
 
 RESOURCES += qml.qrc
@@ -37,6 +38,7 @@ HEADERS += \
     bdhelper.h \
     contact.h \
     contactmodel.h \
+    myimageprovider.h \
     sqlcontactsmodel.h
 
 DISTFILES += \

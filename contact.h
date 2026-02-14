@@ -11,21 +11,21 @@ class Contact : public QObject
     QString m_name;
     QString m_phone;
     QString m_email;
-    int m_avaId;
+    QString m_avaId;
     QColor m_contactColor;
     QString m_company;
 
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString phone READ phone WRITE setPhone NOTIFY phoneChanged)
     Q_PROPERTY(QString email READ email WRITE setEmail NOTIFY emailChanged)
-    Q_PROPERTY(int avaId READ avaId WRITE setAvaId NOTIFY avaIdChanged)
+    Q_PROPERTY(QString avaId READ avaId WRITE setAvaId NOTIFY avaIdChanged)
     Q_PROPERTY(QColor contactColor READ contactColor WRITE setContactColor NOTIFY contactColorChanged)
     Q_PROPERTY(QString company READ company WRITE setCompany NOTIFY companyChahged)
 
 
 public:
     explicit Contact(QObject *parent = nullptr);
-    Contact(QString const& name, QString const& phone, QString const& email, int avaId, QColor const& color, QString const& company)
+    Contact(QString const& name, QString const& phone, QString const& email, QString avaId, QColor const& color, QString const& company)
         : m_name(name), m_phone(phone), m_email(email), m_avaId(avaId), m_contactColor(color), m_company(company) {}
 
     QString name() const
@@ -43,7 +43,7 @@ public:
         return m_email;
     }
 
-    int avaId() const
+    QString avaId() const
     {
         return m_avaId;
     }
@@ -86,7 +86,7 @@ public slots:
         emit emailChanged(m_email);
     }
 
-    void setAvaId(int avaId)
+    void setAvaId(QString avaId)
     {
         if (m_avaId == avaId)
             return;
@@ -118,7 +118,7 @@ signals:
     void nameChanged(QString name);
     void phoneChanged(QString phone);
     void emailChanged(QString email);
-    void avaIdChanged(int avaId);
+    void avaIdChanged(QString avaId);
     void contactColorChanged(QColor contactColor);
     void companyChahged(QString company);
 };

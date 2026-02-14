@@ -7,10 +7,7 @@ Item {
 
     property alias color: content.color
     property alias text: cardText.text
-
-    signal clicked(var event)
-    signal trigger(string name) // cardText.text to be sent.
-    signal sendItem(Item item)
+    property alias source: contactPhoto.source
 
     Rectangle {
         id: content
@@ -18,7 +15,7 @@ Item {
         color: "yellow"
         opacity: 0.5
 
-        Rectangle {
+        /*Rectangle {
             id: contactPhoto
             width: 100
             height: width
@@ -26,6 +23,15 @@ Item {
             x: parent.x + 10
             y: parent.y + 10
             color: "orange"
+        }*/
+        Image {
+            id: contactPhoto
+            property var id
+            source: "image://myimageprovider/asfas"
+            width: 100
+            height: width
+            x: parent.x + 10
+            y: parent.y + 10
         }
 
         Rectangle {
@@ -42,100 +48,6 @@ Item {
                 anchors.centerIn: parent
                 text: "First Name Second Name"
             }
-        }
-
-        Rectangle { // delete button
-            id: deleteButton
-            color: "black"
-            //radius: 10
-            height: 0
-            width: 0
-            anchors.right: content.right
-            anchors.top: content.top
-
-            TapHandler {
-                onTapped: (eventPoint)=>{console.log("DELETING!!!")}
-                //onLongPressed: area.longPress = false
-            }
-        }
-
-        TapHandler {
-            id: area
-            property bool longPress: false
-            property bool selected: false
-            onTapped:{
-                selected = !selected;
-                (eventPoint)=>{root.clicked(eventPoint)}
-                root.trigger(cardText.text); // !!!
-                root.sendItem(root);
-            }
-            onLongPressed: longPress = !longPress
-        }
+        }        
     }
-
-    states: [
-        State {
-           name: "showDeleteButton"
-           when: area.longPress
-           PropertyChanges {
-               target: deleteButton
-               width: 40
-           }
-           PropertyChanges {
-               target: deleteButton
-               height: 40
-           }
-           PropertyChanges {
-               target: content
-               height: 120
-           }
-        },
-        State {
-            name: "normal"
-            when: !area.longPress || !area.selected
-            PropertyChanges {
-                target: deleteButton
-                width: 0
-            }
-            PropertyChanges {
-                target: deleteButton
-                height: 0
-            }
-
-        },
-        State {
-            name: "selected"
-            when: area.selected
-            PropertyChanges {
-                target: root
-                height: 300
-            }
-        }
-
-    ]
-
-    transitions: [Transition {
-        ParallelAnimation {
-            NumberAnimation {
-                target: deleteButton
-                property: "width"
-                easing.type: Easing.InQuad
-                duration: 3000
-            }
-            NumberAnimation {
-                target: deleteButton
-                property: "height"
-                easing.type: Easing.InQuad
-                duration: 3000
-            }
-        }
-    }, Transition {
-            NumberAnimation {
-                target: content
-                property: "height"
-                duration: 3000
-                easing.type: Easing.InOutQuad
-            }
-        }
-    ]
 }

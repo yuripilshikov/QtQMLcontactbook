@@ -3,10 +3,10 @@
 
 ContactModel::ContactModel(QObject *parent) : QAbstractListModel(parent)
 {
-    m_contacts.append(new Contact("Alpha", "+7123321", "alpha@mail.mail", 0, QColor("#bbbbbb"), "ACME"));
-    m_contacts.append(new Contact("Beta", "+7321123", "beta@mail.mail", 0, QColor("#050505"), "ABC"));
-    m_contacts.append(new Contact("Gamma", "+7234432", "gamma@mail.mail", 0, QColor("#060606"), "ARC"));
-    m_contacts.append(new Contact("Delta", "+7345543", "delta@mail.mail", 0, QColor("#cccccc"), "FUSION"));
+    m_contacts.append(new Contact("Alpha", "+7123321", "alpha@mail.mail", "BlueSphere", QColor("#bbbbbb"), "ACME"));
+    m_contacts.append(new Contact("Beta", "+7321123", "beta@mail.mail", "RedCube", QColor("#050505"), "ABC"));
+    m_contacts.append(new Contact("Gamma", "+7234432", "gamma@mail.mail", "GreenThorus", QColor("#060606"), "ARC"));
+    m_contacts.append(new Contact("Delta", "+7345543", "delta@mail.mail", "VioletCone", QColor("#cccccc"), "FUSION"));
 }
 
 
@@ -57,19 +57,16 @@ QHash<int, QByteArray> ContactModel::roleNames() const
 void ContactModel::add()
 {
     beginInsertRows(QModelIndex(), m_contacts.size(), m_contacts.size());
-    m_contacts.append(new Contact("Delta", "+7345543", "delta@mail.mail", 0, QColor("#cccccc"), "FUSION"));
+    m_contacts.append(new Contact("Delta", "+7345543", "delta@mail.mail", "RedCube", QColor("#cccccc"), "FUSION"));
     endInsertRows();
 }
 
-void ContactModel::addItem(QString name, QString phone, QString email, QString Organization)
+void ContactModel::addItem(QString name, QString phone, QString email, QString Organization, QString avatar)
 {
     beginInsertRows(QModelIndex(), m_contacts.size(), m_contacts.size());
-    m_contacts.append(new Contact(name, phone, email, 0, QColor("#cccccc"), Organization));
+    m_contacts.append(new Contact(name, phone, email, avatar, QColor("#cccccc"), Organization));
     endInsertRows();
 }
-
-
-
 
 bool ContactModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
@@ -84,7 +81,7 @@ bool ContactModel::setData(const QModelIndex &index, const QVariant &value, int 
     case EmailRole:
         m_contacts.at(index.row())->setEmail(value.toString());
     case AvaIdRole:
-        m_contacts.at(index.row())->setAvaId(value.toInt());
+        m_contacts.at(index.row())->setAvaId(value.toString());
     case ColorRole:
         m_contacts.at(index.row())->setContactColor(value.toString());
     case CompanyRole:

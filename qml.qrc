@@ -2,7 +2,11 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>ContactCard.qml</file>
-        <file>EditCard.qml</file>
-        <file>ViewCard.qml</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file>images/BlueSphere.png</file>
+        <file>images/GreenThorus.png</file>
+        <file>images/RedCube.png</file>
+        <file>images/VioletCone.png</file>
     </qresource>
 </RCC>

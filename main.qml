@@ -12,37 +12,10 @@ Window {
     height: 640
     title: qsTr("Phone book")
 
-    signal componentTriggered(string name)
-
-    onComponentTriggered: {
-        console.log(name + ' component was triggered')
-    }
-
     StackView {
         id: stack
-        //initialItem: listView
         initialItem: mainMenuScreen
         anchors.fill: parent
-
-        property string selectedName;
-
-        signal showDetails(string name)
-
-        onShowDetails: {
-            stack.selectedName = name;
-            stack.push(detailedView);
-        }
-
-        signal returnToList()
-        onReturnToList: {
-            stack.pop()
-        }
-
-        signal createNewCard()
-        onCreateNewCard: {
-            stack.push(newCardView);
-        }
-
     }
 
     // table view (not working)
@@ -101,15 +74,6 @@ Window {
                 }
 
                 Button {
-                    id: btnQuit
-                    //font.pixelSize: 30
-                    text: "Quit" // пока это чисто для тестов кнопка!
-                    onClicked: {
-                        stack.push(listView); // похоже, можно без сигнала.
-
-                    }
-                }
-                Button {
                     id: btnListView
                     text: "Simple List View"
                     onClicked: {
@@ -149,6 +113,7 @@ Window {
                     delegate: ContactCard {
                         text: name + "\n" + phone + "\n" + email + "\n" + company
                         //color: ListView.isCurrentItem ? "red" : cardColor
+                        source: "image://myimageprovider/" + avatar
                         color: cardColor
                         width: parent.width
 
@@ -179,7 +144,7 @@ Window {
                         Column {
                             GridLayout{
                                 columns: 2
-                                rows: 5
+                                rows: 6
 
                                 Text {
                                     Layout.columnSpan: 2
@@ -215,6 +180,13 @@ Window {
                                     text: "Organization"
                                 }
 
+                                Text {
+                                    Layout.row: 5
+                                    Layout.column: 0
+                                    id: imageT
+                                    text: "Avatar image"
+                                }
+
                                 TextField {
                                     Layout.row: 1
                                     Layout.column: 1
@@ -241,11 +213,17 @@ Window {
                                     id: organization
                                     text: "Organization"
                                 }
+                                TextField {
+                                    Layout.row: 5
+                                    Layout.column: 1
+                                    id: avatar
+                                    text: "BlueSphere"
+                                }
                             }
                             Button {
                                 text: "Create"
                                 onClicked: {
-                                    _model.addItem(name.text, phone.text, email.text, organization.text)
+                                    _model.addItem(name.text, phone.text, email.text, organization.text, avatar.text)
                                 }
                             }
                         }
@@ -254,7 +232,7 @@ Window {
 
                 Button {
                     id: createButton
-                    text: "Create new"
+                    text: "Create default"
                     onClicked: {
                         _model.add()
                     }
@@ -280,59 +258,6 @@ Window {
         }
     }
 
-    // старая версия списка контактов
-    Component {
-        id: listView
-
-        Rectangle {
-            id: content
-
-            signal createNewCard
-
-            Component.onCompleted: {
-                createNewCard.connect(stack.createNewCard);
-            }
-
-            ListView {
-                id: myListView
-                header: Text {text: "Phone book"}
-                anchors.fill: parent
-                model: _model
-                delegate: ContactCard {
-                    text: name + "\n" + phone + "\n" + email
-                    color: cardColor
-                    Component.onCompleted: {
-                        trigger.connect(root.componentTriggered);
-                        trigger.connect(stack.showDetails);
-                    }
-                    onClicked: {
-                        console.log(currentIndex)
-                    }
-                }
-                footer: Text {text: "here be some else text"}
-            }
-
-            Button {
-                id: newCardButton
-                anchors.bottom: parent.bottom;
-                anchors.left: parent.left;
-                text: "create new"
-                onClicked: {
-                    content.createNewCard()
-                }
-            }
-        }
-    }
-
-    Component {
-        id: detailedView
-        ViewCard{}
-    }
-    Component {
-        id: newCardView
-        EditCard{}
-    }
-
     // Открытие пустой базы
     FileDialog {
         id: folderDialog
@@ -349,9 +274,10 @@ Window {
         }
     }
 
-    // open database
+    // открытие существующей базы данных
     FileDialog {
         id: fileDialog
+        title: "Select database file";
         onAccepted: {
             console.log("File: " + fileUrl);
             var result = _dbhelper.connectExistingDatabase(fileUrl);
