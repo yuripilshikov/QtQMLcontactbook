@@ -78,17 +78,17 @@ Window {
                 Button {
                     id: btnNewDB
                     //font.pixelSize: 30
-                    text: "New database (not working)"
+                    text: "New database"
                     onClicked: {
-                        fileDialog.open();
+                        folderDialog.open();
                     }
                 }
                 Button {
                     id: btnOpenDB
                     //font.pixelSize: 30
-                    text: "Open database (TODO)" //
+                    text: "Open database"
                     onClicked: {
-                        //fileDialog.open()
+                        fileDialog.open()
                     }
                 }
 
@@ -116,7 +116,6 @@ Window {
                         stack.push(contactListScreenSimple);
                     }
                 }
-
             }
         }
     }
@@ -137,25 +136,117 @@ Window {
                     width: parent.width
                     height: parent.height - createButton.height - parent.spacing
                     spacing: 10
+                    anchors.margins: 5
                     model: _model
                     clip: true
 
+                    highlight: Rectangle {
+                        color: "orange"
+                    }
+                    highlightFollowsCurrentItem: true
+
+
                     delegate: ContactCard {
                         text: name + "\n" + phone + "\n" + email + "\n" + company
+                        //color: ListView.isCurrentItem ? "red" : cardColor
                         color: cardColor
                         width: parent.width
 
                         signal sendToEditScreen(var name, var phone, var email, var company)
 
-
                         MouseArea {
                             anchors.fill: parent
-                            onDoubleClicked: {
+                            onClicked: {
+                                // не хочет взаимодействовать с выделенным
+                                console.log("Before click: " + ListView.view.currentIndex)
+                                ListView.view.currentIndex = _model.index
+                                console.log("After click: " + ListView.view.currentIndex)
+                            }
+
+                            /*onDoubleClicked: {
+                                // attempt to edit existing card
                                 console.log("double clicked!");
                                 console.log("old company: " + company);
                                 company = "edited";
                                 email = "edited";
                                 console.log("new company: " + company);
+                            }*/
+                        }
+                    }
+                    header: Rectangle {
+                        width: contactListView.width
+                        height: childrenRect.height // чтобы поместилось содержимое
+                        Column {
+                            GridLayout{
+                                columns: 2
+                                rows: 5
+
+                                Text {
+                                    Layout.columnSpan: 2
+                                    Layout.fillWidth: true
+                                    text: "Contact Properties"
+                                }
+
+                                Text {
+                                    Layout.row: 1
+                                    Layout.column: 0
+                                    id: nameT
+                                    text: "Name"
+                                }
+
+                                Text {
+                                    Layout.row: 2
+                                    Layout.column: 0
+                                    id: phoneT
+                                    text: "Phone"
+                                }
+
+                                Text {
+                                    Layout.row: 3
+                                    Layout.column: 0
+                                    id: emailT
+                                    text: "Email"
+                                }
+
+                                Text {
+                                    Layout.row: 4
+                                    Layout.column: 0
+                                    id: orgT
+                                    text: "Organization"
+                                }
+
+                                TextField {
+                                    Layout.row: 1
+                                    Layout.column: 1
+                                    id: name
+                                    text: "Name"
+                                }
+
+                                TextField {
+                                    Layout.row: 2
+                                    Layout.column: 1
+                                    id: phone
+                                    text: "Phone"
+                                }
+
+                                TextField {
+                                    Layout.row: 3
+                                    Layout.column: 1
+                                    id: email
+                                    text: "Email"
+                                }
+                                TextField {
+                                    Layout.row: 4
+                                    Layout.column: 1
+                                    id: organization
+                                    text: "Organization"
+                                }
+                            }
+                            Button {
+                                text: "Create"
+                                onClicked: {
+                                    _model.addItem(name.text, phone.text, email.text, organization.text)
+                                }
                             }
                         }
                     }
@@ -169,10 +260,6 @@ Window {
                     }
                 }
             }
-
-
-
-
         }
 
     }
@@ -198,7 +285,7 @@ Window {
         id: listView
 
         Rectangle {
-            id: content            
+            id: content
 
             signal createNewCard
 
@@ -248,11 +335,29 @@ Window {
 
     // Открытие пустой базы
     FileDialog {
-        id: fileDialog        
+        id: folderDialog
+        title: "Select folder to store contacts database";
+        selectFolder: true;
         onAccepted: {
             console.log("File: " + fileUrl);
             var result = _dbhelper.connectEmptyDatabase(fileUrl);
             console.log(result);
+            // print data base
+            _dbhelper.printDatabase();
+            _sqlmodel.init();
+            stack.push(contactsListScreen);
+        }
+    }
+
+    // open database
+    FileDialog {
+        id: fileDialog
+        onAccepted: {
+            console.log("File: " + fileUrl);
+            var result = _dbhelper.connectExistingDatabase(fileUrl);
+            console.log(result);
+            // print data base
+            _dbhelper.printDatabase();
             _sqlmodel.init();
             stack.push(contactsListScreen);
         }

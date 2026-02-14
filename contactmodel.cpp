@@ -61,6 +61,13 @@ void ContactModel::add()
     endInsertRows();
 }
 
+void ContactModel::addItem(QString name, QString phone, QString email, QString Organization)
+{
+    beginInsertRows(QModelIndex(), m_contacts.size(), m_contacts.size());
+    m_contacts.append(new Contact(name, phone, email, 0, QColor("#cccccc"), Organization));
+    endInsertRows();
+}
+
 
 
 

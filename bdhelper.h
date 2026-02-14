@@ -4,8 +4,9 @@
 #include <QObject>
 #include <QDebug>
 #include <QUrl>
-
-#include "databasemethods.h"
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlQuery>
 
 class BDHelper : public QObject
 {
@@ -15,27 +16,79 @@ public:
 
     Q_INVOKABLE QString connectEmptyDatabase(QString fileurl)
     {
-        //if(performConnection(fileurl.remove(0, 8))) // хак :(
-        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "db");
-        db.setDatabaseName(fileurl.remove(0, 8));
-        if(!db.isValid())
-        {
-            qDebug() << "Connection is not valid: " << db.lastError();
-            return "fail";
-        }
-        if(!db.open())
-        {
-            qDebug() << "Cannot open database: " << db.lastError();
-            return "fail";
-        }
-
+        connectDatabase(fileurl.remove(0, 8) + "/mycontacts.sqlite");
         createTable();
         populateTestData();
 
         return "ok";
     }
 
+    Q_INVOKABLE QString connectExistingDatabase(QString fileUrl)
+    {
+        connectDatabase(fileUrl.remove(0, 8));
+
+        return "ok";
+    }
+
+    Q_INVOKABLE void printDatabase()
+    {
+        QSqlDatabase db = QSqlDatabase::database("db");
+        QString qstr = "SELECT id, name, phone, email, avaid, color, company FROM contacts;";
+        QSqlQuery query(db);
+        if(!query.prepare(qstr))
+        {
+            qDebug() << "Print table query prepare failed: " << db.lastError();
+            return;
+        }
+        if(!query.exec())
+        {
+            qDebug() << "Print table query execution failed: " << db.lastError();
+            return;
+        }
+        qDebug() << "\n\nPrinting database:";
+        qDebug() << "===========================";
+        while(query.next())
+        {
+            qDebug() << QString("%1 %2 %3 %4 %5 %6 %7")
+                        .arg(query.value(0).toString())
+                        .arg(query.value(1).toString())
+                        .arg(query.value(2).toString())
+                        .arg(query.value(3).toString())
+                        .arg(query.value(4).toString())
+                        .arg(query.value(5).toString())
+                        .arg(query.value(6).toString());
+        }
+        qDebug() << "=========================";
+
+        /*
+id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                       "name VARCHAR,"
+                       "phone VARCHAR,"
+                       "email VARCHAR,"
+                       "avaid INTEGER,"
+                       "color VARCHAR,"
+                       "company VARCHAR
+*/
+    }
+
 private:
+
+    bool connectDatabase(QString fileUrl)
+    {
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "db");
+        db.setDatabaseName(fileUrl);
+        if(!db.isValid())
+        {
+            qDebug() << "Connection is not valid: " << db.lastError();
+            return false;
+        }
+        if(!db.open())
+        {
+            qDebug() << "Cannot open database: " << db.lastError();
+            return false;
+        }
+        return true;
+    }
 
     bool createTable()
     {
