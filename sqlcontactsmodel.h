@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QSqlTableModel>
+#include <qqml.h>
 
 class SQLContactsModel : public QSqlTableModel
 {
@@ -18,7 +19,7 @@ public:
         CompanyRole
     };
 
-    explicit SQLContactsModel(QObject *parent = nullptr);
+    explicit SQLContactsModel(QObject *parent = nullptr, QSqlDatabase db = QSqlDatabase());
     Q_INVOKABLE QVariant data(const QModelIndex &index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 

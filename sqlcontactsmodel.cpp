@@ -2,11 +2,9 @@
 #include <QSqlRecord>
 #include <QDebug>
 
-SQLContactsModel::SQLContactsModel(QObject *parent) : QSqlTableModel(parent)
+SQLContactsModel::SQLContactsModel(QObject *parent, QSqlDatabase db) : QSqlTableModel(parent, db)
 {
-
 }
-
 
 QVariant SQLContactsModel::data(const QModelIndex &index, int role) const
 {
@@ -38,4 +36,5 @@ void SQLContactsModel::init()
     setTable("contacts");
     setEditStrategy(QSqlTableModel::OnFieldChange);
     select();
+    qDebug() << "Current row count: " << rowCount(); // выводим количество строк
 }

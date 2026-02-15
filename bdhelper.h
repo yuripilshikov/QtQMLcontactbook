@@ -59,23 +59,13 @@ public:
                         .arg(query.value(6).toString());
         }
         qDebug() << "=========================";
-
-        /*
-id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                       "name VARCHAR,"
-                       "phone VARCHAR,"
-                       "email VARCHAR,"
-                       "avaid INTEGER,"
-                       "color VARCHAR,"
-                       "company VARCHAR
-*/
     }
 
 private:
 
     bool connectDatabase(QString fileUrl)
     {
-        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "db");
+        QSqlDatabase db = QSqlDatabase::database("db");
         db.setDatabaseName(fileUrl);
         if(!db.isValid())
         {

@@ -13,13 +13,15 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     ContactModel model;
-    SQLContactsModel cmodel;
+
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));
 
     engine.rootContext()->setContextProperty("_model", QVariant::fromValue(&model));
 
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "db");
+    SQLContactsModel cmodel(nullptr, db);
     BDHelper bdpelper;
     engine.rootContext()->setContextProperty("_dbhelper", QVariant::fromValue(&bdpelper));
     engine.rootContext()->setContextProperty("_sqlmodel", QVariant::fromValue(&cmodel));
