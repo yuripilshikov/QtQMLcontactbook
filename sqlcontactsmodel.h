@@ -11,7 +11,8 @@ class SQLContactsModel : public QSqlTableModel
 public:
     enum ContactRole
     {
-        NameRole = Qt::UserRole + 1,
+        idRole = Qt::UserRole + 1,
+        NameRole,
         PhoneRole,
         EmailRole,
         AvaIdRole,
@@ -24,6 +25,8 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void init();
+    Q_INVOKABLE void add();
+    Q_INVOKABLE void addItem(QString name, QString phone, QString email, QString Organization, QString avatar);
 
 signals:
 

@@ -88,7 +88,7 @@ private:
                        "name VARCHAR,"
                        "phone VARCHAR,"
                        "email VARCHAR,"
-                       "avaid INTEGER,"
+                       "avaid VARCHAR,"
                        "color VARCHAR,"
                        "company VARCHAR);";
         QSqlQuery query(db);
@@ -109,7 +109,7 @@ private:
     {
         QSqlDatabase db = QSqlDatabase::database("db");
         QString qstr = "INSERT INTO contacts(name, phone, email, avaid, color, company)"
-                       "VALUES ('SomeName', '8-123-3210', 'somename@factory.ru', 1, '#001000', 'NPO VEKTOR');";
+                       "VALUES ('SomeName', '8-123-3210', 'somename@factory.ru', 'BlueSphere', '#001000', 'NPO VEKTOR');";
         QSqlQuery query(db);
         if(!query.prepare(qstr))
         {
