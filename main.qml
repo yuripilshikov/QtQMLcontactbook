@@ -53,6 +53,7 @@ Window {
                         MouseArea {
                             anchors.fill: parent
                             onClicked: {
+                                contactListView.currentIndex = index;
                             }
                             onDoubleClicked: {
                                 _sqlmodel.setData(_sqlmodel.index(index, 1), "Some name here")
@@ -78,6 +79,7 @@ Window {
                         height: childrenRect.height // чтобы поместилось содержимое
                         Column {
                             GridLayout{
+                                id: contactGridLayout
                                 columns: 2
                                 rows: 6
 
@@ -160,6 +162,32 @@ Window {
                                 onClicked: {
                                     console.log("QML: Adding item!")
                                     _sqlmodel.addItem(name.text, phone.text, email.text, organization.text, avatar.text);
+                                }
+                            }
+                            Button {
+                                text: "Update"
+                                onClicked: {
+                                    console.log("CURRENT INDEX IS: " +contactListView.currentIndex);
+
+                                    _sqlmodel.setData(_sqlmodel.index(contactListView.currentIndex, 1), name.text)
+                                    _sqlmodel.setData(_sqlmodel.index(contactListView.currentIndex, 2), phone.text)
+                                    _sqlmodel.setData(_sqlmodel.index(contactListView.currentIndex, 3), email.text)
+                                    _sqlmodel.setData(_sqlmodel.index(contactListView.currentIndex, 4), avatar.text)
+                                    _sqlmodel.setData(_sqlmodel.index(contactListView.currentIndex, 6), organization.text)
+
+                                    if(_sqlmodel.submitAll()) {
+                                        console.log("edit success")
+                                    }
+                                    else {
+                                        //console.log("failed to update row: " + _sqlmodel.lastError().text)
+                                        console.log("fail");
+                                    }
+                                }
+                            }
+                            Button {
+                                text: "Delete"
+                                onClicked: {
+                                    _model.addItem(name.text, phone.text, email.text, organization.text, avatar.text)
                                 }
                             }
                         }
@@ -263,26 +291,20 @@ Window {
                         MouseArea {
                             anchors.fill: parent
                             onClicked: {
-                                // не хочет взаимодействовать с выделенным
-                                console.log("Before click: " + ListView.view.currentIndex)
-                                ListView.view.currentIndex = _model.index
-                                console.log("After click: " + ListView.view.currentIndex)
+                                contactListView.currentIndex = index;
                             }
 
-                            /*onDoubleClicked: {
-                                // attempt to edit existing card
-                                console.log("double clicked!");
-                                console.log("old company: " + company);
-                                company = "edited";
-                                email = "edited";
-                                console.log("new company: " + company);
-                            }*/
+                            onDoubleClicked: {
+                                // editing... not working
+                                _model.company = "edited";
+                                _model.email = "edited";
+                            }
                         }
                     }
                     header: Rectangle {
                         width: contactListView.width
                         height: childrenRect.height // чтобы поместилось содержимое
-                        Column {
+                        Column {                            
                             GridLayout{
                                 columns: 2
                                 rows: 6
@@ -361,12 +383,28 @@ Window {
                                     text: "BlueSphere"
                                 }
                             }
-                            Button {
-                                text: "Create"
-                                onClicked: {
-                                    _model.addItem(name.text, phone.text, email.text, organization.text, avatar.text)
+                            Row {
+                                Button {
+                                    text: "Create"
+                                    onClicked: {
+                                        _model.addItem(name.text, phone.text, email.text, organization.text, avatar.text)
+                                    }
+                                }
+                                Button {
+                                    text: "Update"
+                                    onClicked: {
+                                        _model.addItem(name.text, phone.text, email.text, organization.text, avatar.text)
+                                    }
+                                }
+                                Button {
+                                    text: "Delete"
+                                    onClicked: {
+                                        _model.addItem(name.text, phone.text, email.text, organization.text, avatar.text)
+                                    }
                                 }
                             }
+
+
                         }
                     }
                 }
