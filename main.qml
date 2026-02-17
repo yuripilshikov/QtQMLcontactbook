@@ -128,27 +128,28 @@ Window {
                                     Layout.row: 1
                                     Layout.column: 1
                                     id: name
-                                    text: "Name"
+                                    placeholderText: "Input name"
                                 }
 
                                 TextField {
                                     Layout.row: 2
                                     Layout.column: 1
                                     id: phone
-                                    text: "Phone"
+                                    placeholderText: "Input phone number"
+                                    inputMask: "+9(999)-999-9999"
                                 }
 
                                 TextField {
                                     Layout.row: 3
                                     Layout.column: 1
                                     id: email
-                                    text: "Email"
+                                    placeholderText: "Input email"
                                 }
                                 TextField {
                                     Layout.row: 4
                                     Layout.column: 1
                                     id: organization
-                                    text: "Organization"
+                                    placeholderText: "Input organization"
                                 }
                                 TextField {
                                     Layout.row: 5
@@ -354,27 +355,28 @@ Window {
                                     Layout.row: 1
                                     Layout.column: 1
                                     id: name
-                                    text: "Name"
+                                    placeholderText: "Input name"
                                 }
 
                                 TextField {
                                     Layout.row: 2
                                     Layout.column: 1
                                     id: phone
-                                    text: "Phone"
+                                    placeholderText: "Input phone number"
+                                    inputMask: "+9(999)-999-9999"
                                 }
 
                                 TextField {
                                     Layout.row: 3
                                     Layout.column: 1
                                     id: email
-                                    text: "Email"
+                                    placeholderText: "Input email"
                                 }
                                 TextField {
                                     Layout.row: 4
                                     Layout.column: 1
                                     id: organization
-                                    text: "Organization"
+                                    placeholderText: "Input organization"
                                 }
                                 TextField {
                                     Layout.row: 5
