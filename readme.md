@@ -1,7 +1,5 @@
 # Description
 
-**WORK IN PROGRESS**
-
 ## New database
 
 Connection to new database in user-defined folder.
@@ -16,9 +14,6 @@ The app then will switch to contact list view.
 2. Fill the "Contact properties" in the top part and click "Update". Selected contact will be updated;
 3. Click on a contact will select it;
 4. Double click will change all fields to "some ... here".
-
-TODO:
-- Delete
 
 ## Open database
 
@@ -35,13 +30,8 @@ The app then will switch to contact list view.
 3. Click on a contact will select it;
 4. Double click will change all fields to "some ... here".
 
-## LocalStorageDB
-
-TODO
-
 ## Simple List View
 
 Simple version, without database.
 Functionality is (almost) the same, but changes will not be saved.
-TODO: fix update
-TODO: delete
+

@@ -2,11 +2,15 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>ContactCard.qml</file>
+        <file>ContactListSimple.qml</file>
+        <file>ContactListScreen.qml</file>
     </qresource>
     <qresource prefix="/images">
         <file>images/BlueSphere.png</file>
         <file>images/GreenThorus.png</file>
         <file>images/RedCube.png</file>
         <file>images/VioletCone.png</file>
+        <file>images/testBorderImage.png</file>
+        <file>images/testBorderImage_2.png</file>
     </qresource>
 </RCC>

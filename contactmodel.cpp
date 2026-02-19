@@ -37,7 +37,13 @@ QVariant ContactModel::data(const QModelIndex &index, int role) const
 
 bool ContactModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-    // todo
+    beginRemoveRows(QModelIndex(), row, row + count - 1);
+    for(int i = row; i < row + count; ++i)
+    {
+        m_contacts.removeAt(i);
+    }
+    endRemoveRows();
+    return true;
 }
 
 QHash<int, QByteArray> ContactModel::roleNames() const
@@ -66,6 +72,11 @@ void ContactModel::addItem(QString name, QString phone, QString email, QString O
     beginInsertRows(QModelIndex(), m_contacts.size(), m_contacts.size());
     m_contacts.append(new Contact(name, phone, email, avatar, QColor("#cccccc"), Organization));
     endInsertRows();
+}
+
+void ContactModel::removeRow(int index)
+{
+    removeRows(index, 1, QModelIndex());
 }
 
 bool ContactModel::setData(const QModelIndex &index, const QVariant &value, int role)

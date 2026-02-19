@@ -27,6 +27,7 @@ public:
     Q_INVOKABLE void init();
     Q_INVOKABLE void add();
     Q_INVOKABLE void addItem(QString name, QString phone, QString email, QString Organization, QString avatar);
+    Q_INVOKABLE void removeRow(int index);
 
 signals:
 

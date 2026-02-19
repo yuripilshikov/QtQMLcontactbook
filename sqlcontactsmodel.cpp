@@ -67,3 +67,12 @@ void SQLContactsModel::addItem(QString name, QString phone, QString email, QStri
         qDebug() << "Error occured: " << lastError().text();
     }
 }
+
+void SQLContactsModel::removeRow(int index)
+{
+    removeRows(index, 1);
+    if(!submitAll())
+    {
+        qDebug() << "Error occured: " << lastError().text();
+    }
+}

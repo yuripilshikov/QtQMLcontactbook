@@ -20,197 +20,36 @@ Window {
 
     Component {
         id: contactsListScreen
-        Rectangle {
-            color: "skyblue"
 
-            Column {
-                anchors.margins: 10
-                anchors.fill: parent
-                spacing: 10
-
-                ListView {
-                    id: contactListView
-                    width: parent.width
-                    height: parent.height - createButton.height - parent.spacing
-                    spacing: 10
-                    anchors.margins: 5
-                    model: _sqlmodel
-                    clip: true
-
-                    highlight: Rectangle {
-                        color: "orange"
-                    }
-                    highlightFollowsCurrentItem: true
-
-                    delegate: ContactCard {
-                        text: name + "\n" + phone + "\n" + email + "\n" + company
-                        source: "image://myimageprovider/" + avaid
-                        color: color
-                        width: parent.width
-
-                        signal sendToEditScreen(var name, var phone, var email, var company)
-
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: {
-                                contactListView.currentIndex = index;
-                            }
-                            onDoubleClicked: {
-                                _sqlmodel.setData(_sqlmodel.index(index, 1), "Some name here")
-                                _sqlmodel.setData(_sqlmodel.index(index, 2), "Some phone here")
-                                _sqlmodel.setData(_sqlmodel.index(index, 3), "Some email here")
-                                _sqlmodel.setData(_sqlmodel.index(index, 4), "GreenThorus")
-                                _sqlmodel.setData(_sqlmodel.index(index, 6), "Some organization here")
-
-                                if(_sqlmodel.submitAll()) {
-                                    console.log("edit success")
-                                }
-                                else {
-                                    //console.log("failed to update row: " + _sqlmodel.lastError().text)
-                                    console.log("fail");
-                                }
-
-                            }
-                        }
-                    }
-                    header: Rectangle {
-                        id: headerRect
-                        width: contactListView.width
-                        height: childrenRect.height // чтобы поместилось содержимое
-                        Column {
-                            GridLayout{
-                                id: contactGridLayout
-                                columns: 2
-                                rows: 6
-
-                                Text {
-                                    Layout.columnSpan: 2
-                                    Layout.fillWidth: true
-                                    text: "Contact Properties"
-                                }
-
-                                Text {
-                                    Layout.row: 1
-                                    Layout.column: 0
-                                    id: nameT
-                                    text: "Name"
-                                }
-
-                                Text {
-                                    Layout.row: 2
-                                    Layout.column: 0
-                                    id: phoneT
-                                    text: "Phone"
-                                }
-
-                                Text {
-                                    Layout.row: 3
-                                    Layout.column: 0
-                                    id: emailT
-                                    text: "Email"
-                                }
-
-                                Text {
-                                    Layout.row: 4
-                                    Layout.column: 0
-                                    id: orgT
-                                    text: "Organization"
-                                }
-
-                                Text {
-                                    Layout.row: 5
-                                    Layout.column: 0
-                                    id: imageT
-                                    text: "Avatar image"
-                                }
-
-                                TextField {
-                                    Layout.row: 1
-                                    Layout.column: 1
-                                    id: name
-                                    placeholderText: "Input name"
-                                }
-
-                                TextField {
-                                    Layout.row: 2
-                                    Layout.column: 1
-                                    id: phone
-                                    placeholderText: "Input phone number"
-                                    inputMask: "+9(999)-999-9999"
-                                }
-
-                                TextField {
-                                    Layout.row: 3
-                                    Layout.column: 1
-                                    id: email
-                                    placeholderText: "Input email"
-                                }
-                                TextField {
-                                    Layout.row: 4
-                                    Layout.column: 1
-                                    id: organization
-                                    placeholderText: "Input organization"
-                                }
-                                TextField {
-                                    Layout.row: 5
-                                    Layout.column: 1
-                                    id: avatar
-                                    text: "BlueSphere"
-                                }
-                            }
-                            Button {
-                                text: "Create"
-                                onClicked: {
-                                    console.log("QML: Adding item!")
-                                    _sqlmodel.addItem(name.text, phone.text, email.text, organization.text, avatar.text);
-                                }
-                            }
-                            Button {
-                                text: "Update"
-                                onClicked: {
-                                    console.log("CURRENT INDEX IS: " +contactListView.currentIndex);
-
-                                    _sqlmodel.setData(_sqlmodel.index(contactListView.currentIndex, 1), name.text)
-                                    _sqlmodel.setData(_sqlmodel.index(contactListView.currentIndex, 2), phone.text)
-                                    _sqlmodel.setData(_sqlmodel.index(contactListView.currentIndex, 3), email.text)
-                                    _sqlmodel.setData(_sqlmodel.index(contactListView.currentIndex, 4), avatar.text)
-                                    _sqlmodel.setData(_sqlmodel.index(contactListView.currentIndex, 6), organization.text)
-
-                                    if(_sqlmodel.submitAll()) {
-                                        console.log("edit success")
-                                    }
-                                    else {
-                                        //console.log("failed to update row: " + _sqlmodel.lastError().text)
-                                        console.log("fail");
-                                    }
-                                }
-                            }
-                            Button {
-                                text: "Delete"
-                                onClicked: {
-                                    _model.addItem(name.text, phone.text, email.text, organization.text, avatar.text)
-                                }
-                            }
-                        }
-                    }
-                }
-
-                Button {
-                    id: createButton
-                    text: "Create default"
-                    onClicked: {
-                        //_sqlmodel.add()
-                    }
-                }
-            }
-        }
+        ContactListScreen{}
     }
 
     Component {
         id: mainMenuScreen
         Rectangle {
             id: content
-            color: "orchid"
+            color: "#f1e9d2"
+
+            BorderImage {
+                id: myBorderImage
+                anchors {fill: parent; margins: 20}
+                border.left: 16; border.top: 16
+                border.right: 16; border.bottom: 16
+                horizontalTileMode: BorderImage.Repeat
+                verticalTileMode: BorderImage.Repeat
+                source: "image://myimageprovider/testBorderImage"
+            }
+
+            BorderImage {
+                id: myBorderImage1
+                anchors {fill: parent; margins: 80}
+                border.left: 16; border.top: 16
+                border.right: 16; border.bottom: 16
+                horizontalTileMode: BorderImage.Repeat
+                verticalTileMode: BorderImage.Repeat
+                source: "image://myimageprovider/testBorderImage_2"
+            }
+
 
             Column {
                 spacing: 30
@@ -234,14 +73,6 @@ Window {
                 }
 
                 Button {
-                    id: btnTryLocalStorage
-                    text: "LocalStorage DB"
-                    onClicked: {
-                        stack.push(localStorageView)
-                    }
-                }
-
-                Button {
                     id: btnListView
                     text: "Simple List View"
                     onClicked: {
@@ -252,191 +83,10 @@ Window {
         }
     }
 
-
     // С "моделью" в памяти
     Component {
         id: contactListScreenSimple
-
-        Rectangle {
-            color: "skyblue"
-
-            Column {
-                anchors.margins: 10
-                anchors.fill: parent
-                spacing: 10
-
-                ListView {
-                    id: contactListView
-                    width: parent.width
-                    height: parent.height - createButton.height - parent.spacing
-                    spacing: 10
-                    anchors.margins: 5
-                    model: _model
-                    clip: true
-
-                    highlight: Rectangle {
-                        color: "orange"
-                    }
-                    highlightFollowsCurrentItem: true
-
-
-                    delegate: ContactCard {
-                        text: name + "\n" + phone + "\n" + email + "\n" + company
-                        //color: ListView.isCurrentItem ? "red" : cardColor
-                        source: "image://myimageprovider/" + avatar
-                        color: cardColor
-                        width: parent.width
-
-                        signal sendToEditScreen(var name, var phone, var email, var company)
-
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: {
-                                contactListView.currentIndex = index;
-                            }
-
-                            onDoubleClicked: {
-                                // editing... not working
-                                _model.company = "edited";
-                                _model.email = "edited";
-                            }
-                        }
-                    }
-                    header: Rectangle {
-                        width: contactListView.width
-                        height: childrenRect.height // чтобы поместилось содержимое
-                        Column {                            
-                            GridLayout{
-                                columns: 2
-                                rows: 6
-
-                                Text {
-                                    Layout.columnSpan: 2
-                                    Layout.fillWidth: true
-                                    text: "Contact Properties"
-                                }
-
-                                Text {
-                                    Layout.row: 1
-                                    Layout.column: 0
-                                    id: nameT
-                                    text: "Name"
-                                }
-
-                                Text {
-                                    Layout.row: 2
-                                    Layout.column: 0
-                                    id: phoneT
-                                    text: "Phone"
-                                }
-
-                                Text {
-                                    Layout.row: 3
-                                    Layout.column: 0
-                                    id: emailT
-                                    text: "Email"
-                                }
-
-                                Text {
-                                    Layout.row: 4
-                                    Layout.column: 0
-                                    id: orgT
-                                    text: "Organization"
-                                }
-
-                                Text {
-                                    Layout.row: 5
-                                    Layout.column: 0
-                                    id: imageT
-                                    text: "Avatar image"
-                                }
-
-                                TextField {
-                                    Layout.row: 1
-                                    Layout.column: 1
-                                    id: name
-                                    placeholderText: "Input name"
-                                }
-
-                                TextField {
-                                    Layout.row: 2
-                                    Layout.column: 1
-                                    id: phone
-                                    placeholderText: "Input phone number"
-                                    inputMask: "+9(999)-999-9999"
-                                }
-
-                                TextField {
-                                    Layout.row: 3
-                                    Layout.column: 1
-                                    id: email
-                                    placeholderText: "Input email"
-                                }
-                                TextField {
-                                    Layout.row: 4
-                                    Layout.column: 1
-                                    id: organization
-                                    placeholderText: "Input organization"
-                                }
-                                TextField {
-                                    Layout.row: 5
-                                    Layout.column: 1
-                                    id: avatar
-                                    text: "BlueSphere"
-                                }
-                            }
-                            Row {
-                                Button {
-                                    text: "Create"
-                                    onClicked: {
-                                        _model.addItem(name.text, phone.text, email.text, organization.text, avatar.text)
-                                    }
-                                }
-                                Button {
-                                    text: "Update"
-                                    onClicked: {
-                                        _model.addItem(name.text, phone.text, email.text, organization.text, avatar.text)
-                                    }
-                                }
-                                Button {
-                                    text: "Delete"
-                                    onClicked: {
-                                        _model.addItem(name.text, phone.text, email.text, organization.text, avatar.text)
-                                    }
-                                }
-                            }
-
-
-                        }
-                    }
-                }
-
-                Button {
-                    id: createButton
-                    text: "Create default"
-                    onClicked: {
-                        _model.add()
-                    }
-                }
-            }
-        }
-
-    }
-
-    // непонятно, как с ним работать. TODO
-    Component {
-        id: localStorageView
-        Rectangle {
-            Component.onCompleted: {
-                /*var db = LocalStorage.openDatabaseSync("MyAppData", "1.0", "My Application Database", 1000000);
-                db.transaction(function (tx) {
-                    tx.executeSql('CREATE TABLE IF NOT EXISTS greetings (message TEXT)');
-                    tx.executeSql('INSERT INTO greetings VALUES (?)', ['Hello, QML!']);
-                    var results = tx.executeSql('SELECT * FROM greetings');
-                    console.log("Database entry:", results.rows.item(0).message);
-                });*/
-            }
-        }
+        ContactListSimple {}
     }
 
     // Открытие пустой базы
